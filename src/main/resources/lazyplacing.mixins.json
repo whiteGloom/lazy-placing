@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "dev.emiller.mc.lazyplacing.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"BlockItemMixin",
+		"ServerPlayerEntityMixin"
+	],
+	"server": [
+
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
