@@ -1,6 +1,6 @@
 # Lazy Placing
 
-A Minecraft 1.20.1 Fabric mod which changes one of the main mechanics in game - block placement timing.
+A Minecraft ~1.20.1 Fabric mod which changes one of the main mechanics in game - block placement timing.
 
 In vanilla Minecraft, any block will be placed instantly, but now you'll have to wait a bit before block will be placed.
 
@@ -19,8 +19,10 @@ The mod...
 ## Dependencies
 
 This mod requires:
-* Minecraft Java Edition v1.20.1;
-* [Fabric Loader](https://fabricmc.net/use/) v0.16.9+.
+* Minecraft Java Edition ~1.20.1;
+* [Fabric Loader](https://fabricmc.net/use/) ^0.16.9.
+
+(Version resolution from [Fabric Documentation](https://wiki.fabricmc.net/documentation:fabric_mod_json_spec#versionrange))
 
 ## Uninstallation
 
