@@ -1,6 +1,6 @@
 # Lazy Placing
 
-[CurseForge](https://legacy.curseforge.com/minecraft/mc-mods/lazy-placing) •
+[CurseForge](https://www.curseforge.com/minecraft/mc-mods/lazy-placing) •
 [Modrinth](https://modrinth.com/mod/lazy-placing)
 
 A Minecraft ~1.20.1 Fabric mod which changes one of the main mechanics in game - block placement timing.
