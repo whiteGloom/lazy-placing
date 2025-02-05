@@ -16,6 +16,14 @@ The mod...
 * should be compatible with most of other mods, it should work with all block-items, which do not have custom block placement mechanics;
 * affects only survival gamemode.
 
+## Dependencies
+
+This mod requires [Fabric Loader](https://fabricmc.net/use/) v0.16.9+.
+
+## Uninstallation
+
+To uninstall the mod, just remove it from the `mods` folder.
+
 ## Configuration
 
 When the game starts for the first time, the mod will generate a configuration file in `config/lazyplacing.json` (in root folder of Minecraft, not `mods` folder).
