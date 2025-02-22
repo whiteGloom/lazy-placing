@@ -7,10 +7,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class LazyPlacingNetwork {
-    public static void sendPlacingProgress(float progress, ServerPlayerEntity playerReference) {
+    public static void sendPlacingClear(ServerPlayerEntity playerReference) {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeFloat(progress);
 
-        ServerPlayNetworking.send(playerReference, LazyPlacingConstants.BLOCK_PLACING_PROGRESS_UPDATE_PACKET_ID, buf);
+        ServerPlayNetworking.send(playerReference, LazyPlacingConstants.BLOCK_PLACING_CLEAR_PACKET_ID, buf);
     }
 }

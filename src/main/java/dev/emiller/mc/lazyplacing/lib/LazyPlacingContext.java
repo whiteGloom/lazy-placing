@@ -1,9 +1,8 @@
 package dev.emiller.mc.lazyplacing.lib;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
@@ -11,15 +10,15 @@ import net.minecraft.world.RaycastContext;
 import static net.minecraft.server.network.ServerPlayNetworkHandler.MAX_BREAK_SQUARED_DISTANCE;
 
 
-public class BlockPlacingContext {
-    int passedTicks = 0;
-    BlockItem originalBlockReference;
-    ItemUsageContext itemUsageContext;
-    Vec3d playerPositionReference;
-    int duration;
-    private boolean _done = false;
+public class LazyPlacingContext {
+    public int passedTicks = 0;
+    public BlockItem originalBlockReference;
+    public ItemUsageContext itemUsageContext;
+    public Vec3d playerPositionReference;
+    public int duration;
+    public boolean isDone = false;
 
-    public BlockPlacingContext(
+    public LazyPlacingContext(
             BlockItem originalBlockReference, ItemUsageContext itemUsageContext, int duration,
             Vec3d playerPositionReference
     ) {
@@ -30,28 +29,24 @@ public class BlockPlacingContext {
     }
 
     public float getProgress() {
-        return (float) passedTicks / duration;
-    }
+        float value = (float) passedTicks / duration;
 
-    public boolean isDone() {
-        return _done;
-    }
+        if (value > 1) {
+            return 1;
+        }
 
-    public void setDone() {
-        originalBlockReference.place(new ItemPlacementContext(itemUsageContext));
-
-        _done = true;
+        return value;
     }
 
     public void tick() {
         passedTicks++;
 
         if (passedTicks >= duration) {
-            setDone();
+            isDone = true;
         }
     }
 
-    public boolean didPositionChangedTooMuch(ServerPlayerEntity player) {
+    public boolean didPositionChangedTooMuch(PlayerEntity player) {
         double yawRad = Math.toRadians(-player.getYaw());
         double pitchRad = Math.toRadians(player.getPitch());
 
@@ -64,14 +59,13 @@ public class BlockPlacingContext {
         Vec3d cameraPosition = player.getPos().add(0, player.getStandingEyeHeight(), 0);
 
         // Default raycast method of player entity is not used here because it is less accurate
-        BlockHitResult hitResult = itemUsageContext.getWorld()
-                .raycast(new RaycastContext(
-                        cameraPosition,
-                        cameraPosition.add(direction.multiply(Math.sqrt(MAX_BREAK_SQUARED_DISTANCE))),
-                        RaycastContext.ShapeType.OUTLINE,
-                        RaycastContext.FluidHandling.ANY,
-                        player
-                ));
+        BlockHitResult hitResult = itemUsageContext.getWorld().raycast(new RaycastContext(
+                cameraPosition,
+                cameraPosition.add(direction.multiply(Math.sqrt(MAX_BREAK_SQUARED_DISTANCE))),
+                RaycastContext.ShapeType.OUTLINE,
+                RaycastContext.FluidHandling.ANY,
+                player
+        ));
 
         if (hitResult.getType() == BlockHitResult.Type.MISS) {
             return true;
