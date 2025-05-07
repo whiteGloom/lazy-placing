@@ -1,16 +1,17 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "dev.emiller.mc.lazyplacing.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "lazyplacing.refmap.json",
   "mixins": [
-    "BlockItemMixin",
-    "PlayerEntityMixin",
-    "ServerPlayerEntityMixin"
+    "common.BlockItemMixin",
+    "common.PlayerEntityMixin",
+    "common.ServerPlayerEntityMixin"
   ],
-  "server": [
-
+  "client": [
+    "client.ClientPlayerEntityMixin",
+    "client.GuiMixin"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+  "server": []
 }

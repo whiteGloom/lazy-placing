@@ -1,25 +1,35 @@
 package dev.emiller.mc.lazyplacing;
 
-import dev.emiller.mc.lazyplacing.lib.LazyPlacingConfig;
-import net.fabricmc.api.ModInitializer;
-
+import com.mojang.logging.LogUtils;
+import dev.emiller.mc.lazyplacing.libs.LazyPlacingConfig;
+import dev.emiller.mc.lazyplacing.network.LazyPlacingNetwork;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class LazyPlacing implements ModInitializer {
-	public static final String MOD_ID = "lazyplacing";
-
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(LazyPlacing.MODID)
+public class LazyPlacing
+{
+    // Define mod id in a common place for everything to reference
+    public static final String MODID = "lazyplacing";
+    // Directly reference a slf4j logger
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final LazyPlacingConfig CONFIG = LazyPlacingConfig.load();
 
-	@Override
-	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
-	}
+    public LazyPlacing(FMLJavaModLoadingContext context)
+    {
+        // Register ourselves for server and other game events we are interested in
+        context.getModEventBus().register(this);
+    }
+
+    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    @SubscribeEvent
+    public void onServerStarting(FMLCommonSetupEvent event)
+    {
+        LazyPlacingNetwork.register();
+    }
 }

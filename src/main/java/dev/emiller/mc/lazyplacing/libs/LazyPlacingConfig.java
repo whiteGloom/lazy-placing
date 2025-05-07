@@ -1,4 +1,4 @@
-package dev.emiller.mc.lazyplacing.lib;
+package dev.emiller.mc.lazyplacing.libs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,6 +21,7 @@ public class LazyPlacingConfig {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
                 return GSON.fromJson(reader, LazyPlacingConfig.class);
             } catch (IOException e) {
+                System.out.println("LazyPlacing: Failed to load config file! Default values will be used.");
                 e.printStackTrace();
             }
         }
@@ -32,6 +33,7 @@ public class LazyPlacingConfig {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(this, writer);
         } catch (IOException e) {
+            System.out.println("LazyPlacing: Failed to save config file!");
             e.printStackTrace();
         }
 
