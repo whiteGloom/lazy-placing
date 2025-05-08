@@ -1,7 +1,7 @@
 package dev.emiller.mc.lazyplacing.mixin.common;
 
-import dev.emiller.mc.lazyplacing.LazyPlacing;
-import dev.emiller.mc.lazyplacing.libs.LazyPlacingConfig;
+import dev.emiller.mc.lazyplacing.configs.LazyPlacingConfigs;
+import dev.emiller.mc.lazyplacing.configs.ServerConfig;
 import dev.emiller.mc.lazyplacing.libs.LazyPlacingContext;
 import dev.emiller.mc.lazyplacing.bridge.PlayerEntityMixinInterface;
 import net.minecraft.world.entity.player.Player;
@@ -20,10 +20,15 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
 
     @Unique
     public void lazyPlacing$onTryToPlaceBlock(BlockItem originalBlockReference, UseOnContext itemUsageContext) {
+        ServerConfig config = LazyPlacingConfigs.hostConfig;
+
+        if (config == null) {
+            return;
+        }
+
         Player playerReference = (Player) (Object) this;
 
         Random random = new Random();
-        LazyPlacingConfig config = LazyPlacing.CONFIG;
 
         int stableDurationPart = config.stablePlacingDuration;
         int flexibleDurationPart = config.maxRandomAdditionDuration > 0 ?

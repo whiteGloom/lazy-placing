@@ -1,5 +1,8 @@
 package dev.emiller.mc.lazyplacing.network;
 
+import dev.emiller.mc.lazyplacing.configs.ServerConfig;
+import dev.emiller.mc.lazyplacing.network.packets.BlockPlacingClearPacket;
+import dev.emiller.mc.lazyplacing.network.packets.ServerConfigPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
@@ -25,9 +28,21 @@ public class LazyPlacingNetwork {
             BlockPlacingClearPacket::decode,
             BlockPlacingClearPacket::handle
         );
+
+        INSTANCE.registerMessage(
+            id++,
+            ServerConfigPacket.class,
+            ServerConfigPacket::encode,
+            ServerConfigPacket::decode,
+            ServerConfigPacket::handle
+        );
     }
 
     public static void sendPlacingClear(ServerPlayer playerReference) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> playerReference), new BlockPlacingClearPacket());
+    }
+
+    public static void sendConfigToPlayer(ServerPlayer playerReference, ServerConfig config) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> playerReference), new ServerConfigPacket(config));
     }
 }

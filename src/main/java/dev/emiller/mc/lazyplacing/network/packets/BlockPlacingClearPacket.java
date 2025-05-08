@@ -1,6 +1,6 @@
-package dev.emiller.mc.lazyplacing.network;
+package dev.emiller.mc.lazyplacing.network.packets;
 
-import dev.emiller.mc.lazyplacing.network.client.BlockPlacingClearPacketHandler;
+import dev.emiller.mc.lazyplacing.network.packets.client.BlockPlacingClearPacketHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
