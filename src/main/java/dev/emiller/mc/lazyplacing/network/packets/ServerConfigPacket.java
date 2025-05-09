@@ -4,10 +4,8 @@ import dev.emiller.mc.lazyplacing.configs.ServerConfig;
 import dev.emiller.mc.lazyplacing.network.packets.client.ServerConfigPacketHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class ServerConfigPacket {
     public ServerConfig config;
@@ -16,9 +14,9 @@ public class ServerConfigPacket {
         this.config = config;
     }
 
-    public static void encode(ServerConfigPacket msg, FriendlyByteBuf buf) {
-        buf.writeInt(msg.config.stablePlacingDuration);
-        buf.writeInt(msg.config.maxRandomAdditionDuration);
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeInt(config.stablePlacingDuration);
+        buf.writeInt(config.maxRandomAdditionDuration);
     }
 
     public static ServerConfigPacket decode(FriendlyByteBuf ignoredBuf) {
@@ -30,10 +28,10 @@ public class ServerConfigPacket {
         );
     }
 
-    public static void handle(ServerConfigPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ServerConfigPacketHandler.handle(
-                msg, ctx)));
+    public void handle(CustomPayloadEvent.Context ctx) {
+        ctx.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ServerConfigPacketHandler.handle(
+                this, ctx)));
 
-        ctx.get().setPacketHandled(true);
+        ctx.setPacketHandled(true);
     }
 }

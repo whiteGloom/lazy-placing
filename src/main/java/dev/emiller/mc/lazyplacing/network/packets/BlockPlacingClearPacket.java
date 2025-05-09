@@ -3,28 +3,26 @@ package dev.emiller.mc.lazyplacing.network.packets;
 import dev.emiller.mc.lazyplacing.network.packets.client.BlockPlacingClearPacketHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class BlockPlacingClearPacket {
     public BlockPlacingClearPacket() {
         goofy();
     }
 
-    public static void encode(BlockPlacingClearPacket ignoredMsg, FriendlyByteBuf ignoredBuf) {
+    public void encode(FriendlyByteBuf ignoredBuf) {
     }
 
     public static BlockPlacingClearPacket decode(FriendlyByteBuf ignoredBuf) {
         return new BlockPlacingClearPacket();
     }
 
-    public static void handle(BlockPlacingClearPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> BlockPlacingClearPacketHandler.handle(
-                msg, ctx)));
+    public void handle(CustomPayloadEvent.Context ctx) {
+        ctx.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> BlockPlacingClearPacketHandler.handle(
+                this, ctx)));
 
-        ctx.get().setPacketHandled(true);
+        ctx.setPacketHandled(true);
     }
 
     public void goofy() {
