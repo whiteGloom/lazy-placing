@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 public interface PlayerEntityMixinInterface {
     void lazyPlacing$onTryToPlaceBlock(BlockItem originalBlockReference, ItemUsageContext itemUsageContext);
 
-    void lazyPlacing$cleanPlacingContext();
+    void lazyPlacing$clearPlacingContext();
 
     @Nullable LazyPlacingContext lazyPlacing$getLazyPlacingContext();
 }

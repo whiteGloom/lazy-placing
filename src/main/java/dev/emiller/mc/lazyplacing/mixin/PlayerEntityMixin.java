@@ -1,7 +1,7 @@
 package dev.emiller.mc.lazyplacing.mixin;
 
-import dev.emiller.mc.lazyplacing.LazyPlacing;
-import dev.emiller.mc.lazyplacing.lib.LazyPlacingConfig;
+import dev.emiller.mc.lazyplacing.configs.LazyPlacingConfigs;
+import dev.emiller.mc.lazyplacing.configs.ServerConfig;
 import dev.emiller.mc.lazyplacing.lib.LazyPlacingContext;
 import dev.emiller.mc.lazyplacing.mbridge.PlayerEntityMixinInterface;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,14 +21,18 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
 
     @Unique
     public void lazyPlacing$onTryToPlaceBlock(BlockItem originalBlockReference, ItemUsageContext itemUsageContext) {
+        ServerConfig config = LazyPlacingConfigs.hostConfig;
+
+        if (config == null) {
+            return;
+        }
+
         PlayerEntity playerReference = (PlayerEntity) (Object) this;
 
         Random random = new Random();
-        LazyPlacingConfig config = LazyPlacing.CONFIG;
 
         int stableDurationPart = config.stablePlacingDuration;
-        int flexibleDurationPart = config.maxRandomAdditionDuration > 0 ?
-                random.nextInt(config.maxRandomAdditionDuration) : 0;
+        int flexibleDurationPart = config.maxRandomAdditionDuration > 0 ? random.nextInt(config.maxRandomAdditionDuration) : 0;
 
         this.lazyPlacingContext = new LazyPlacingContext(
                 originalBlockReference,
@@ -39,7 +43,7 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     }
 
     @Unique
-    public void lazyPlacing$cleanPlacingContext() {
+    public void lazyPlacing$clearPlacingContext() {
         this.lazyPlacingContext = null;
     }
 
@@ -51,7 +55,7 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
             ItemPlacementContext placementContext = new ItemPlacementContext(lazyPlacingContext.itemUsageContext);
 
             if (lazyPlacingContext.didPositionChangedTooMuch(playerReference)) {
-                lazyPlacing$cleanPlacingContext();
+                onPlacingFailed();
             } else {
                 lazyPlacingContext.tick();
 
@@ -66,7 +70,7 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
 
     @Unique
     public void onPlacingFailed() {
-        lazyPlacing$cleanPlacingContext();
+        lazyPlacing$clearPlacingContext();
     }
 
     @Unique
